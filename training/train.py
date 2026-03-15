@@ -8,7 +8,7 @@ from tokenizers import Tokenizer
 
 tokenizer=Tokenizer.from_file("tokenizer/tokenizer.json")
 
-with open("D:\Mini-GPT\data\datset.txt","r",encoding="utf-8") as f:
+with open("D:/Mini-GPT/data/datset.txt","r",encoding="utf-8") as f:
     text=f.read()
 tokens=tokenizer.encode(text).ids
 data = torch.tensor(tokens)

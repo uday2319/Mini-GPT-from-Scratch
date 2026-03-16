@@ -1,4 +1,4 @@
-vocab_size = 5000
+vocab_size = 10000
 block_size = 128
 embed_dim = 256
 heads = 8

@@ -27,6 +27,7 @@ class MiniGPT(nn.Module):
         logits=self.lm_head(x)
 
         return logits
+    
 
 if __name__ == "__main__":
 

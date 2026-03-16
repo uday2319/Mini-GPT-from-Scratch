@@ -10,5 +10,5 @@ trainer=BpeTrainer(
     special_tokens=["[PAD]", "[UNK]", "[BOS]", "[EOS]"]
 
 )
-tokenizer.train(["D:/Mini-GPT/data/datset.txt"],trainer)
+tokenizer.train(["D:/Mini-GPT/data/datasetTinyShakesphere.txt"],trainer)
 tokenizer.save("tokenizer/tokenizer.json")

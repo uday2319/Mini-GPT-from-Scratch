@@ -8,7 +8,7 @@ from tokenizers import Tokenizer
 
 tokenizer=Tokenizer.from_file("tokenizer/tokenizer.json")
 
-with open("data/dataset.txt","r",encoding="utf-8") as f:
+with open("data/datasetTinyShakesphere.txt","r",encoding="utf-8") as f:
     text=f.read()
 tokens=tokenizer.encode(text).ids
 data = torch.tensor(tokens)
@@ -41,3 +41,4 @@ for step in range(max_iters):
 
     if step%100==0:
         print("step:",step,"loss :",loss.item())
+

@@ -41,4 +41,7 @@ for step in range(max_iters):
 
     if step%100==0:
         print("step:",step,"loss :",loss.item())
+        
+torch.save(model.state_dict(), "mini_gpt.pth")
+print("Model saved as mini_gpt.pth")
 

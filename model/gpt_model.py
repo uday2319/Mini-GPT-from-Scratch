@@ -31,7 +31,7 @@ class MiniGPT(nn.Module):
 
 if __name__ == "__main__":
 
-    vocab_size = 10000
+    vocab_size = 5000
     block_size = 128
     embed_dim = 256
     heads = 4

@@ -1,7 +1,6 @@
 # Mini-GPT from Scratch
 
-This project implements a GPT-style Transformer language model from scratch using PyTorch. It covers the full pipeline: tokenization,Attention mechanism, Resiudal connection ,Normalization model architecture, training, and text generation.
-
+A minimal implementation of a GPT-style Transformer language model built from scratch using PyTorch. This project demonstrates how modern Large Language Models (LLMs) work internally —  It covers the full pipeline: tokenization,Attention mechanism, Resiudal connection ,Normalization model architecture, training, and text generation.
 ---
 ## Overview
 
@@ -51,7 +50,6 @@ Mini-GPT
 ├── README.md
 └── .gitignore
 ```
-
 ---
 
 ## Configuration

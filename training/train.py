@@ -16,7 +16,7 @@ data = torch.tensor(tokens)
 
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def train():
-    
+    mlflow.set_tracking_uri("file:///D:/MINI-GPT/mlruns")
     model=MiniGPT(
     vocab_size,
     block_size,
@@ -55,8 +55,9 @@ def train():
                 mlflow.log_metric("train_loss",loss.item(),step=step)
 
         torch.save(model.state_dict(), "mini_gpt.pth")
-        mlflow.pytorch.log_model(model,"model")
+        mlflow.pytorch.log_model(model,"model",pickle_module=None)
 
+        mlflow.end_run()
         print("Model saved as mini_gpt.pth")
 
 if __name__=="__main__":

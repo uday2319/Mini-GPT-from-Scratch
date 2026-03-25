@@ -55,7 +55,7 @@ interface=gr.Interface(
     fn=generate,
     inputs=gr.Textbox(lines=2,placeholder="Enter Prompt..."),
     outputs="text",
-    title="Mini- GPT "
+    title="Mini- GPT"
 
 )
 interface.launch()

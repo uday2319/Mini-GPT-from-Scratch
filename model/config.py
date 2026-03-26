@@ -6,5 +6,5 @@ layers = 4
 
 batch_size = 32
 learning_rate = 3e-4
-max_iters = 10000
+max_iters = 4000
 device = "cuda"

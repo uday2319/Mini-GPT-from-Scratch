@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/MINI-GPT/mlruns/0/eb434fd4ff2c40f6916b197a2980e893/artifacts
+end_time: 1774539317699
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: eb434fd4ff2c40f6916b197a2980e893
+run_name: bold-gnu-921
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1774539053535
+status: 3
+tags: []
+user_id: udayi

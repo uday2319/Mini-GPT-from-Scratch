@@ -7,7 +7,7 @@ class FeedFarward(nn.Module):
             nn.Linear(embed_dim,4*embed_dim),
             nn.GELU(),
             nn.Linear(4*embed_dim,embed_dim),
-            nn.Dropout(0.1)
+            nn.Dropout(0.2)
         )
     def forward(self,x):
         return self.net(x)

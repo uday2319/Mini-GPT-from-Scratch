@@ -12,6 +12,7 @@ tokenizer=Tokenizer.from_file("tokenizer/tokenizer.json")
 with open("data/datasetTinyShakesphere.txt","r",encoding="utf-8") as f:
     text=f.read()
 tokens=tokenizer.encode(text).ids
+
 data = torch.tensor(tokens)
 n1=int(0.8*len(data))
 n2=int(0.9*len(data))
@@ -72,7 +73,7 @@ def train():
             loss.backward()
             optimizer.step()
 
-            if step%500==0:
+            if step%100==0:
                 val_loss=estimate_loss(model,val_data)
                 mlflow.log_metric("train_loss",loss.item(),step=step)
                 mlflow.log_metric("val Loss" ,val_loss,step=step)

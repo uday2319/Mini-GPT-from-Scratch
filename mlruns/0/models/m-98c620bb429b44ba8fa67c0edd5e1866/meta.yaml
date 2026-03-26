@@ -1,0 +1,10 @@
+artifact_location: file:///D:/MINI-GPT/mlruns/0/models/m-98c620bb429b44ba8fa67c0edd5e1866/artifacts
+creation_timestamp: 1774539311393
+experiment_id: '0'
+last_updated_timestamp: 1774539317692
+model_id: m-98c620bb429b44ba8fa67c0edd5e1866
+model_type: null
+name: model
+source_run_id: eb434fd4ff2c40f6916b197a2980e893
+status: 2
+status_message: null

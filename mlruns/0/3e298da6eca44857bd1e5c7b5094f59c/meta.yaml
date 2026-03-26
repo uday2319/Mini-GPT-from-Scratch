@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/MINI-GPT/mlruns/0/3e298da6eca44857bd1e5c7b5094f59c/artifacts
+end_time: 1774455560943
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3e298da6eca44857bd1e5c7b5094f59c
+run_name: blushing-midge-882
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1774454451234
+status: 3
+tags: []
+user_id: udayi

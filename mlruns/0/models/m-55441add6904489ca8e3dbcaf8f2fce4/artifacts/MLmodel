@@ -1,0 +1,23 @@
+artifact_path: file:///D:/MINI-GPT/mlruns/0/models/m-55441add6904489ca8e3dbcaf8f2fce4/artifacts
+flavors:
+  python_function:
+    config:
+      device: null
+    data: data
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pytorch
+    pickle_module_name: mlflow.pytorch.pickle_module
+    python_version: 3.11.9
+  pytorch:
+    code: null
+    model_data: data
+    pytorch_version: 2.5.1+cu121
+mlflow_version: 3.10.1
+model_id: m-55441add6904489ca8e3dbcaf8f2fce4
+model_size_bytes: 23060812
+model_uuid: m-55441add6904489ca8e3dbcaf8f2fce4
+prompts: null
+run_id: 3e298da6eca44857bd1e5c7b5094f59c
+utc_time_created: '2026-03-25 16:19:15.482093'

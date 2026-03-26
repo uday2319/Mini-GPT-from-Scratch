@@ -18,7 +18,7 @@ model=MiniGPT(
 model.load_state_dict(torch.load("mini_gpt.pth", map_location=device))
 model.eval()
 
-prompt="First citizen:"
+prompt="All: "
 tokens=tokenizer.encode(prompt).ids
 context = torch.tensor([tokens], dtype=torch.long).to(device)
 

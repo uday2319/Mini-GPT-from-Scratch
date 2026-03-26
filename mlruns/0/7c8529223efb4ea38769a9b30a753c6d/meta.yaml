@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/MINI-GPT/mlruns/0/7c8529223efb4ea38769a9b30a753c6d/artifacts
+end_time: 1774447560334
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7c8529223efb4ea38769a9b30a753c6d
+run_name: bright-smelt-396
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1774447002027
+status: 3
+tags: []
+user_id: udayi

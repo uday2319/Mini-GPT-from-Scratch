@@ -108,17 +108,14 @@ The model generates text autoregressively, predicting one token at a time.
 ## Possible Improvements
 
 * Increase vocabulary size and dataset scale
-* Add top-k and temperature sampling
-* Implement top-p (nucleus) sampling
 * Add checkpoint saving and resume training
 * Train deeper and wider models
-* Add evaluation metrics (perplexity)
 * Build an interactive interface for generation
 
 ---
 
 ## Summary
 
-This project demonstrates how GPT-style models work internally by implementing every component from scratch. It provides a practical understanding of Transformers, attention mechanisms, and language model training.
+This project demonstrates how GPT-style models work internally by implementing every component from scratch. It provides a practical understanding of Transformers and its architecture, attention mechanisms, and language model training.
 
 ---

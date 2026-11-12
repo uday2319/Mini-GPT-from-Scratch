@@ -20,18 +20,116 @@ The project also includes MLflow experiment tracking, a Gradio web demo and a Gi
 
 ---
 
+## Project Pipeline
+
+How data, code and outputs connect from raw text to generated text:
+
+```mermaid
+flowchart LR
+    data[("Tiny Shakespeare<br/>data/datasetTinyShakesphere.txt")]
+    tokpy["Train BPE tokenizer<br/>tokenizer/tokenizer.py"]
+    tokjson[/"tokenizer.json<br/>5,000 tokens"/]
+    split["Encode + split<br/>80% train · 10% val · 10% test"]
+    train["Training loop<br/>training/train.py<br/>AdamW · cross-entropy"]
+    ckpt[/"mini_gpt.pth<br/>trained weights"/]
+    mlf[("MLflow<br/>params · losses · model")]
+    cli["generator.py<br/>command line"]
+    app["app.py<br/>Gradio web UI"]
+
+    data --> tokpy --> tokjson
+    data --> split
+    tokjson --> split
+    split --> train
+    train --> ckpt
+    train -.->|"logs every 100 steps"| mlf
+    ckpt --> cli
+    ckpt --> app
+
+    classDef store fill:#e8f0fe,stroke:#4a6fa5,color:#1a1a1a
+    classDef step fill:#fff4e0,stroke:#c88a2c,color:#1a1a1a
+    classDef out fill:#e6f4ea,stroke:#3c8d5a,color:#1a1a1a
+    class data,tokjson,ckpt,mlf store
+    class tokpy,split,train step
+    class cli,app out
+```
+
+---
+
 ## Architecture
 
-```
-Text → BPE Tokenizer → Token Embedding + Positional Embedding
-     → N × Transformer Block → Final LayerNorm → Linear (LM head) → Next-token logits
+The model is a decoder-only Transformer. Shapes are shown for batch size `B` and sequence length `T ≤ 128`:
+
+```mermaid
+flowchart TD
+    subgraph BLOCK["Transformer block × 4 (pre-LayerNorm)"]
+        direction TB
+        xin["Block input x<br/>(B, T, 256)"]
+        ln1["LayerNorm"]
+        attn["Causal multi-head self-attention<br/>8 heads × 32 dims · tril mask"]
+        add1(("+"))
+        ln2["LayerNorm"]
+        ff["Feedforward<br/>256 → 1024 → 256 · GELU · Dropout 0.2"]
+        add2(("+"))
+
+        xin --> ln1 --> attn --> add1
+        xin -.->|"residual"| add1
+        add1 --> ln2 --> ff --> add2
+        add1 -.->|"residual"| add2
+    end
+
+    text["Input text"]
+    tok["BPE tokenizer"]
+    ids["Token IDs<br/>(B, T)"]
+    temb["Token embedding<br/>5000 → 256"]
+    pemb["Positional embedding<br/>learned, 128 → 256"]
+    sum(("+"))
+    lnf["Final LayerNorm"]
+    head["Linear LM head<br/>256 → 5000"]
+    logits["Logits<br/>(B, T, 5000)"]
+    next["Next-token prediction"]
+
+    text --> tok --> ids
+    ids --> temb --> sum
+    ids --> pemb --> sum
+    sum --> xin
+    add2 --> lnf --> head --> logits --> next
+
+    classDef io fill:#e8f0fe,stroke:#4a6fa5,color:#1a1a1a
+    classDef layer fill:#fff4e0,stroke:#c88a2c,color:#1a1a1a
+    classDef core fill:#fde8e8,stroke:#b54a4a,color:#1a1a1a
+    classDef op fill:#f2f2f2,stroke:#666,color:#1a1a1a
+    class text,ids,logits,next,xin io
+    class tok,temb,pemb,ln1,ln2,lnf,head,ff layer
+    class attn core
+    class sum,add1,add2 op
 ```
 
-Each Transformer block uses **pre-layer-norm** residual connections, as in GPT-2:
+Each block applies LayerNorm **before** each sub-layer and adds the result back to its input, as in GPT-2:
 
 ```
 x = x + MultiHeadAttention(LayerNorm(x))
 x = x + FeedForward(LayerNorm(x))
+```
+
+Inside the attention layer, the causal mask stops each token from seeing tokens that come after it:
+
+```mermaid
+flowchart LR
+    x["x<br/>(B, T, 256)"] --> q["Q = x·Wq"] & k["K = x·Wk"] & v["V = x·Wv"]
+    q --> heads["Split into 8 heads<br/>(B, 8, T, 32)"]
+    k --> heads
+    v --> heads
+    heads --> score["Q·Kᵀ / √32"]
+    score --> mask["Causal mask<br/>future → −∞"]
+    mask --> soft["Softmax"]
+    soft --> wv["× V"]
+    wv --> merge["Merge heads<br/>(B, T, 256)"]
+    merge --> out["Output projection"]
+
+    classDef core fill:#fde8e8,stroke:#b54a4a,color:#1a1a1a
+    classDef plain fill:#f2f2f2,stroke:#666,color:#1a1a1a
+    class mask,soft core
+    class x,q,k,v,heads,score,wv,merge,out plain
 ```
 
 | Component | File | Details |
@@ -155,7 +253,28 @@ python app.py
 
 Open the local URL Gradio prints (usually http://127.0.0.1:7860), type a prompt and submit.
 
-Both scripts sample with:
+Both scripts generate text one token at a time:
+
+```mermaid
+flowchart LR
+    prompt["Prompt"] --> enc["Encode<br/>to token IDs"]
+    enc --> win["Keep last<br/>128 tokens"]
+    win --> model["MiniGPT"]
+    model --> last["Logits of the<br/>last position"]
+    last --> temp["÷ temperature<br/>0.7"]
+    temp --> topk["Keep top-k<br/>40 tokens"]
+    topk --> sample["Softmax +<br/>sample"]
+    sample --> append["Append<br/>new token"]
+    append -->|"repeat 100×"| win
+    append -->|"done"| dec["Decode<br/>to text"]
+
+    classDef loop fill:#fff4e0,stroke:#c88a2c,color:#1a1a1a
+    classDef io fill:#e8f0fe,stroke:#4a6fa5,color:#1a1a1a
+    class win,model,last,temp,topk,sample,append loop
+    class prompt,enc,dec io
+```
+
+Sampling settings:
 
 - `temperature = 0.7`: values below 1 make the output more focused
 - `top_k = 40`: sample only from the 40 most likely tokens
